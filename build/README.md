@@ -47,6 +47,25 @@ Leader anchors are pinned by hand in `crops/` space in `breeds.py`
 into plate space. **Always eyeball `proof.jpg` after touching an anchor** — the
 working-master build once shipped every leader line invisible.
 
+## Field photos (`wild`)
+
+Each card pairs the book plate with a real photograph — the plate teaches the
+standard, the field photo teaches what you actually meet. `wild.py` fetches one
+per breed from Wikimedia Commons, `wildfix.py` re-fetches the bad ones, and the
+author/licence/source are stored alongside the pixels and shown on the **reveal
+only** (the Commons filename names the breed and would give the question away).
+
+Only free licences are accepted: CC BY, CC BY-SA, CC0, public domain.
+
+**Automated picking cannot be trusted.** The first pass returned a Goldendoodle
+for "Standard Poodle", PSF clipart for the American Water Spaniel, and the same
+costumed toy poodle for two different breeds. The guards that fixed it are in
+`wildfix.py`: require the filename to actually name the breed (`MUST`), block
+crossbreed tokens (`CROSS`), reject drawings and clipart (`ART`), reject
+sleeping/close-up shots (`DEAD`), and refuse a file already used by another
+breed. **Always render the contact sheet and look at all 58** — a wrong photo
+teaches the wrong dog, which is worse than no photo.
+
 ## Adding the next chapter
 
 Copy this folder, swap `breeds.py` (data + `KNOWLEDGE` lives in `assemble.py`),
