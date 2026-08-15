@@ -40,9 +40,40 @@ def encode(src, maxw=1150, q=80):
     im = Image.open(os.path.join(CROPS, src + ".jpg")).convert("RGB")
     if im.width > maxw:
         im = im.resize((maxw, round(im.height * maxw / im.width)), Image.LANCZOS)
+    return _b64(im, q)
+
+
+def _b64(im, q):
     buf = io.BytesIO()
     im.save(buf, "JPEG", quality=q, optimize=True, progressive=True)
     return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
+
+
+WILD_DIR = os.path.join(HERE, "wild")
+WILD_META = json.load(open(os.path.join(HERE, "wild.json"))) \
+    if os.path.exists(os.path.join(HERE, "wild.json")) else {}
+
+
+def wild(src, maxw=760, q=72):
+    """The field photograph, pre-cropped to the 4:3 the plate renders it at.
+
+    The plate is the breed standard; this is the dog as it actually looks, which
+    is what you have to recognise at the kennel. Credit travels with the pixels
+    because these are other people's CC-licensed photographs."""
+    meta = WILD_META.get(src)
+    path = os.path.join(WILD_DIR, src + ".jpg")
+    if not meta or not os.path.exists(path):
+        return None
+    im = Image.open(path).convert("RGB")
+    tw, th = im.width, round(im.width * 3 / 4)
+    if th > im.height:                       # too short: crop width instead
+        th, tw = im.height, round(im.height * 4 / 3)
+    im = im.crop(((im.width - tw) // 2, (im.height - th) // 2,
+                  (im.width - tw) // 2 + tw, (im.height - th) // 2 + th))
+    if im.width > maxw:
+        im = im.resize((maxw, round(im.height * maxw / im.width)), Image.LANCZOS)
+    return {"by": meta["by"], "lic": meta["lic"], "licUrl": meta["licUrl"],
+            "src": meta["src"], "img": _b64(im, q)}
 
 
 def build_breeds():
@@ -73,6 +104,9 @@ def build_breeds():
             "ax": ax, "ay": ay, "side": b["side"],
             "img": encode(b["src"]),
         }
+        w = wild(b["src"])
+        if w:
+            rec["wild"] = w
         out.append(rec)
     return out
 
