@@ -66,6 +66,50 @@ sleeping/close-up shots (`DEAD`), and refuse a file already used by another
 breed. **Always render the contact sheet and look at all 58** — a wrong photo
 teaches the wrong dog, which is worse than no photo.
 
+## Cleaning the plates (`clean.py`) — read this before touching it
+
+Three approaches were tried. Two failed, and they failed the same way, so the
+working rule is worth stating plainly:
+
+**Never mask or cut the dog out. Erase the page around it.**
+
+Most gundogs are white-and-liver or white-and-orange, and a white chest is the
+same tone as white paper. Any "keep the pixels that differ from paper" rule
+therefore amputates the pale half of the animal — both cut-out attempts produced
+spaniels with no legs and setters with no chest.
+
+What works, in order:
+
+1. **Separate type from dog by stroke width, not position.** A caption stroke is
+   a few pixels thick; a leg is fifty. Erasing every thin stroke *anywhere*
+   catches captions printed hard against the dog, which an "erase what is far
+   from the dog" rule can never reach — the body absorbs the ground shadow the
+   dog stands in, and captions inside that shadow read as part of the animal.
+2. **Only erase small leftovers.** "Ink that is not the body" is too blunt on its
+   own: an ear or a raised head that the opening separated from the trunk is
+   exactly that, and painting it out beheads the dog. This is what happened to
+   the Pont-Audemer Spaniel.
+3. **Flatten the background to a locally estimated page tone,** not one flat
+   colour. These are photographs of a book under a lighting gradient; a single
+   fill value leaves visible ghost rectangles wherever type used to be.
+
+Twelve plates print a neighbouring breed, a strip of puppies, a chapter header
+or the table hard against the dog. No rule distinguishes those from the animal,
+because they genuinely are in frame. Their frames are set by hand in `HAND_BOX` /
+`HAND_TRIM`, read off a decile grid, and the cleaner is not allowed to re-crop
+them.
+
+**Always render the QC contact sheets and look at all 58.** Every failure in this
+pipeline was invisible in the numbers and obvious in the picture.
+
+## The five kinds
+
+`GROUP_GUIDE` and `DECISION` in `assemble.py` drive a screen that teaches what
+separates pointer, setter, spaniel, retriever and water dog — job, build, ears,
+coat, tail, plus a five-step decision tree and three example plates per group.
+`inject_groups()` splices the screen, its CSS and its render function into the
+cloned engine. Eight of the knowledge questions drill the same distinctions.
+
 ## Adding the next chapter
 
 Copy this folder, swap `breeds.py` (data + `KNOWLEDGE` lives in `assemble.py`),
