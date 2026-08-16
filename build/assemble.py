@@ -97,7 +97,7 @@ def build_breeds():
             "maxHeightCm": nums(b["height"]), "maxWeightKg": nums(b["weight"]),
             "otherColors": b.get("colors", []), "varieties": b.get("varieties", []),
             "fieldMarks": b["marks"], "para": b["para"], "tell": b["tell"],
-            "say": "", "hook": b["hook"], "confuse": confuse[:8],
+            "say": b.get("say", ""), "hook": b["hook"], "confuse": confuse[:8],
             "sources": [b["src"] + ".heic"],
             "mark": b["mark"],
             "anchor": "whole" if b.get("whole") else "feature",
@@ -417,6 +417,82 @@ def main():
                       ",".join(f".btile .thumb.{k}" for k in GROUP_KEYS))
     src = src.replace('const PALE=new Set(["white-lgd","corded"]);',
                       "const PALE=new Set(" + json.dumps(sorted(PALE_FAMS)) + ");")
+
+    # ---- the group drill ----
+    # Breed ID can only ever test the 58 dogs in the book. Naming the KIND
+    # transfers to any gundog that walks in, and it is the first cut a handler
+    # actually makes on sight, so it earns its own mode. It reuses the flash
+    # screen wholesale; only the four buttons and the right-answer test change.
+    src = src.replace(
+        '    <button class="mode-card" data-mode="knowledge">',
+        '''    <button class="mode-card" data-mode="group">
+      <div class="ic blue"><svg viewBox="0 0 24 24"><path d="M3 6h7v5H3zM14 6h7v5h-7zM3 15h7v3H3zM14 15h7v3h-7z"/></svg></div>
+      <h3>Which kind?</h3><p>Pointer, setter, spaniel, retriever or water dog — the first cut you make on sight.</p>
+    </button>
+    <button class="mode-card" data-mode="knowledge">''', 1)
+
+    src = src.replace(
+        'else if(m==="knowledge")startKnowledge();',
+        'else if(m==="group")startGroup();\n  else if(m==="knowledge")startKnowledge();', 1)
+
+    src = src.replace(
+        "function comboMeter(el,combo){",
+        '''const GROUP_OPTS=Object.keys(GROUPNAMES).map(g=>({gid:g,name:GROUPNAMES[g]}));
+function startGroup(){
+  const P=pool();
+  if(P.length<5){toast("Need a few more breeds — widen the filter.");return}
+  const n=Math.min(20,P.length);
+  F={label:"which kind",grp:true,rev:false,qs:shuffle([...P]).slice(0,n),
+     i:0,ok:0,missed:[],combo:0,best:0,xp:0,answered:false};
+  show("flash");renderFlash();
+}
+function comboMeter(el,combo){''', 1)
+
+    src = src.replace(
+        '    $("flash-prompt").textContent="Who\'s this?";',
+        '    $("flash-prompt").textContent=F.grp?"Which kind of gundog?":"Who\'s this?";', 1)
+
+    src = src.replace(
+        '  const box_=$("flash-opts");box_.innerHTML="";\n'
+        '  F.opts.forEach((o,i)=>{const btn=document.createElement("button");btn.className="opt";',
+        '  const box_=$("flash-opts");box_.innerHTML="";\n'
+        '  if(F.grp)F.opts=GROUP_OPTS.slice();\n'
+        '  F.opts.forEach((o,i)=>{const btn=document.createElement("button");btn.className="opt";', 1)
+
+    src = src.replace(
+        '  const b=F.qs[F.i],chosen=F.opts[i],right=chosen.id===b.id;\n'
+        '  document.querySelectorAll("#flash-opts .opt").forEach((btn,j)=>{btn.disabled=true;\n'
+        '    if(F.opts[j].id===b.id)btn.classList.add("correct");',
+        '  const b=F.qs[F.i],chosen=F.opts[i],\n'
+        '        right=F.grp?chosen.gid===b.group:chosen.id===b.id;\n'
+        '  document.querySelectorAll("#flash-opts .opt").forEach((btn,j)=>{btn.disabled=true;\n'
+        '    if(F.grp?F.opts[j].gid===b.group:F.opts[j].id===b.id)btn.classList.add("correct");', 1)
+
+    # naming the kind is not naming the dog, so it must not graduate a breed
+    src = src.replace('if(S.run[b.id]>=3&&!S.graduated[b.id]){',
+                      'if(!F.grp&&S.run[b.id]>=3&&!S.graduated[b.id]){', 1)
+
+    # A miss in group mode picks a GROUP, not a breed, so the confused-pair stat
+    # would key on an undefined id and the side-by-side VS card would be handed
+    # something with no fieldMarks, no height and no group -- which threw on
+    # groupName(undefined).toLowerCase(). Both paths are breed-vs-breed by
+    # nature, so group mode skips them and reveals the breed card instead:
+    # what you needed to learn is which dog it was and which kind it belongs to.
+    src = src.replace(
+        '    const key=[b.id,chosen.id].sort().join("|");\n'
+        '    S.pairs[key]=(S.pairs[key]||0)+1;',
+        '    if(!F.grp){const key=[b.id,chosen.id].sort().join("|");\n'
+        '      S.pairs[key]=(S.pairs[key]||0)+1;}', 1)
+
+    src = src.replace(
+        '    revealHTML=F.duel\n'
+        '      ? `<div class="reveal">${duelTellsHTML(b,chosen)}</div>`+vsHTML(chosen,b)\n'
+        '      : vsHTML(chosen,b);',
+        '    revealHTML=F.grp\n'
+        '      ? `<div class="reveal">${breedCardHTML(b,true)}</div>`\n'
+        '      : F.duel\n'
+        '      ? `<div class="reveal">${duelTellsHTML(b,chosen)}</div>`+vsHTML(chosen,b)\n'
+        '      : vsHTML(chosen,b);', 1)
 
     # ---- naming, counts, chrome ----
     # the ranks were pastoral because the dogs were; a gundog ladder is a shoot day

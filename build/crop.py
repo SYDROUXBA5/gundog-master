@@ -26,7 +26,7 @@ BOX = {
     "IMG_4350": (0.00, 0.28, 0.95, 1.00),  # corded poodle
     "IMG_4351": (0.45, 0.13, 1.00, 0.98),  # barbet
     "IMG_4352": (0.50, 0.25, 1.00, 1.00),  # frisian water dog
-    "IMG_4353": (0.00, 0.38, 1.00, 1.00),  # pont-audemer
+    "IMG_4353": (0.00, 0.28, 1.00, 1.00),  # pont-audemer (head sits high)
     "IMG_4354": (0.42, 0.18, 1.00, 1.00),  # brittany
     "IMG_4355": (0.47, 0.12, 1.00, 1.00),  # lagotto
     "IMG_4356": (0.33, 0.25, 0.97, 1.00),  # small munsterlander

@@ -154,12 +154,12 @@ def clean(path, work=1000, pad=0.04, no_recrop=False):
 # cleaner sees them: (left, top, right, bottom) as fractions to cut away.
 HAND_TRIM = {
     "IMG_4339": (0.075, 0.00, 0.00, 0.00),   # neighbouring dog, left edge
-    "IMG_4340": (0.00, 0.155, 0.00, 0.00),   # strip of puppy feet across the top
+    "IMG_4340": (0.00, 0.085, 0.00, 0.02),   # strip of puppy feet across the top
     "IMG_4346": (0.00, 0.00, 0.02, 0.125),   # table under the book, page curl
     "IMG_4350": (0.00, 0.00, 0.03, 0.00),    # page edge, right
-    "IMG_4355": (0.00, 0.13, 0.05, 0.00),    # chapter header and caption block
-    "IMG_4360": (0.055, 0.00, 0.00, 0.12),   # page edge left, table below
-    "IMG_4364": (0.00, 0.00, 0.05, 0.11),    # table and page edge, lower right
+    "IMG_4355": (0.00, 0.135, 0.03, 0.00),   # chapter header and caption block
+    "IMG_4360": (0.045, 0.00, 0.00, 0.07),   # page edge left, table below
+    "IMG_4364": (0.10, 0.275, 0.00, 0.06),   # header text, neighbour dog, table
 }
 # Five plates where automatic framing cannot win: the neighbouring breed, a
 # strip of puppies, a chapter header or the table sit hard against the dog, and
@@ -204,24 +204,25 @@ def run():
         if not f.endswith(".jpg"):
             continue
         key = f[:-4]
-        src = Image.open(os.path.join(CROPS, f)).convert("RGB")
-        base = (0.0, 0.0, 1.0, 1.0)
-
         if key in HAND_BOX:
             bx = HAND_BOX[key]
-            W0, H0 = src.size
-            framed = src.crop((int(bx[0] * W0), int(bx[1] * H0),
-                               int(bx[2] * W0), int(bx[3] * H0)))
-            fpath = os.path.join(tmp, "h_" + f)
-            framed.save(fpath, quality=95)
-            r = clean(fpath, no_recrop=True)
-            (r[0] if r else framed).save(os.path.join(OUT, f), quality=92)
+            im0 = Image.open(os.path.join(CROPS, f)).convert("RGB")
+            W0, H0 = im0.size
+            im0.crop((int(bx[0] * W0), int(bx[1] * H0),
+                      int(bx[2] * W0), int(bx[3] * H0))).save(
+                          os.path.join(tmp, "h_" + f), quality=95)
+            r = clean(os.path.join(tmp, "h_" + f), no_recrop=True)
+            if r is None:
+                weak.append((key, "hand-box no core"))
+                continue
+            r[0].save(os.path.join(OUT, f), quality=92)
             boxes[key] = [round(v, 4) for v in bx]
             continue
-
+        src = Image.open(os.path.join(CROPS, f)).convert("RGB")
+        base = (0.0, 0.0, 1.0, 1.0)
         if key in HAND_TRIM:
-            l, t, r, b = HAND_TRIM[key]
-            base = (l, t, 1.0 - r, 1.0 - b)
+            l, t, r_, b = HAND_TRIM[key]
+            base = (l, t, 1.0 - r_, 1.0 - b)
             W0, H0 = src.size
             src = src.crop((int(base[0] * W0), int(base[1] * H0),
                             int(base[2] * W0), int(base[3] * H0)))
@@ -234,14 +235,6 @@ def run():
             weak.append((key, "no core"))
             continue
         _, b1, _, _, _ = first
-        if key in SKIP_TIGHT:
-            img0 = first[0]
-            img0.save(os.path.join(OUT, f), quality=92)
-            bx, by = base[2] - base[0], base[3] - base[1]
-            boxes[key] = [round(v, 4) for v in
-                          (base[0] + b1[0] * bx, base[1] + b1[1] * by,
-                           base[0] + b1[2] * bx, base[1] + b1[3] * by)]
-            continue
         W, H = src.size
         tight = src.crop((int(b1[0] * W), int(b1[1] * H), int(b1[2] * W), int(b1[3] * H)))
         tpath = os.path.join(tmp, f)
