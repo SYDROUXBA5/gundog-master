@@ -204,7 +204,173 @@ KNOWLEDGE = [
   "explain":"The Spinone Italiano stands 23-28 in (58-70 cm), the tallest range in the group."},
  {"q":"Why is the Spinone Italiano an easy walking companion?","options":["It needs almost no exercise","It naturally moves at a slower pace than most gundogs","It cannot walk far","It refuses to run"],"answer":1,
   "explain":"The Spinone is inclined to work at a slightly slower pace than other gundogs, which suits a walking pace."},
+ {"q":"You meet a tall, lean, short-coated gundog with a level tail. Which group?","options":["Spaniel","Pointer or HPR","Retriever","Water dog"],"answer":1,
+  "explain":"Leggy, square and short-coated is the pointer outline. A setter has the same build under a long silky coat."},
+ {"q":"What separates a setter from a pointer at a glance?","options":["The setter is much smaller","The setter's long silky feathered coat","The setter has erect ears","The setter has a curled tail"],"answer":1,
+  "explain":"They share the job and roughly the build; the setter carries a long flat silky coat with heavy feathering."},
+ {"q":"Which feature most reliably marks a spaniel?","options":["A curled tail","Long, low-set, heavily fringed ears","Webbed feet","A black nose"],"answer":1,
+  "explain":"Spaniel ears hang low and long with heavy fringe. Retriever ears are shorter and set higher."},
+ {"q":"A square, solid dog with a thick straight tail and a broad kind head is most likely which group?","options":["Retriever","Setter","Water dog","Pointer"],"answer":0,
+  "explain":"Heavier than a pointer, shorter-eared than a spaniel, with a thick tail — the Labrador's otter tail is the type."},
+ {"q":"A gundog in tight curls or hanging cords belongs to which group?","options":["Setter","Water dog","Pointer","Retriever"],"answer":1,
+  "explain":"Coat texture is the water dog's tell: curls, wool or cords, never a straight jacket."},
+ {"q":"Which breed is named a spaniel but is built and coated like a water dog?","options":["Sussex Spaniel","Irish Water Spaniel","Field Spaniel","Welsh Springer Spaniel"],"answer":1,
+  "explain":"The Irish Water Spaniel carries dense ringlets on a tall square frame — a water dog in all but name."},
+ {"q":"A wirehaired gundog has a harsh flat coat, not curls. Which group is it likely in?","options":["Water dog","Pointer or HPR","Retriever","Spaniel"],"answer":1,
+  "explain":"Harsh flat wire belongs to the HPR breeds — the Spinone, the Griffon, the Cesky Fousek. Curls and cords mean water dog."},
+ {"q":"Compared with a spaniel, a retriever is generally...","options":["Smaller with longer ears","Bigger and squarer with shorter, higher-set ears","Identical in build","Lower to the ground"],"answer":1,
+  "explain":"Size, a squarer outline and shorter higher ears separate retriever from spaniel."},
 ]
+
+
+# The five groups look alike breed by breed but differ by JOB, and the job shows
+# in the build. This screen teaches that shape before any breed name does.
+GROUP_GUIDE = [
+ {"key": "pointer", "name": "Pointer &amp; HPR", "job": "Find the bird and freeze",
+  "one": "Tall, lean and short-coated. Built to quarter a field all day.",
+  "marks": [["Coat", "Short and tight — you can see the muscle under it. The wirehaired ones are harsh and flat, never curly."],
+            ["Build", "Leggy and square, deep chest, tucked belly. The most athletic outline in the group."],
+            ["Head", "Long clean muzzle, high-set ears lying flat to the cheek."],
+            ["Tail", "Carried level with the back, or docked short."]],
+  "vs": "If it is tall and lean but wearing a long silky coat, it is a SETTER, not a pointer."},
+ {"key": "setter", "name": "Setter", "job": "Find the bird and freeze",
+  "one": "A pointer's height and job, wearing a long silky feathered coat.",
+  "marks": [["Coat", "Long, flat and silky, with heavy feathering on chest, legs and tail."],
+            ["Build", "Tall and elegant — as leggy as a pointer under all that hair."],
+            ["Head", "Long and lean, ears set low and hanging in a fold."],
+            ["Tail", "Carried level like a flag, thickly feathered underneath."]],
+  "vs": "Same job as a pointer, different coat. Against a SPANIEL: a setter is far taller and longer in the leg."},
+ {"key": "spaniel", "name": "Spaniel", "job": "Flush the bird out of cover",
+  "one": "Compact and low, with long low-set ears framing the face.",
+  "marks": [["Ears", "The giveaway — long, low-set and heavily fringed, hanging well below the jaw."],
+            ["Build", "Small to medium and compact; body longer than the legs are tall."],
+            ["Coat", "Medium, wavy or flat, feathered on legs and belly."],
+            ["Tail", "Carried low, often docked, feathered underneath."]],
+  "vs": "Ear set is the test: a spaniel's ears hang low and long; a retriever's are shorter and set higher."},
+ {"key": "retriever", "name": "Retriever", "job": "Fetch the shot bird back",
+  "one": "Solid, square and powerful, with a thick straight tail and a kind broad head.",
+  "marks": [["Build", "Sturdy and balanced — heavier through the body than a pointer, shorter-coupled than a spaniel."],
+            ["Head", "Broad skull, moderate stop, open friendly expression."],
+            ["Coat", "Dense and weatherproof, with a real undercoat. Straight or wavy, never corded."],
+            ["Tail", "Thick at the base and carried straight — the Labrador's 'otter' tail is the type."]],
+  "vs": "Against a SPANIEL: bigger, squarer, shorter ears. Against a POINTER: heavier and less leggy."},
+ {"key": "water", "name": "Water dog", "job": "Work and retrieve in water",
+  "one": "Read the coat: curls, cords or wool — never a straight jacket.",
+  "marks": [["Coat", "Tight curls, dense wool, or long hanging cords. Often clipped, which is a grooming choice, not the breed."],
+            ["Build", "Square and agile, medium-sized, built to swim rather than to gallop."],
+            ["Head", "Frequently buried in coat — topknots, beards and moustaches are common."],
+            ["Tail", "Varies a lot: plumed, ringed, or shorn as part of a working clip."]],
+  "vs": "Careful: the Irish Water Spaniel is named a spaniel but is built and coated like a water dog."},
+]
+
+DECISION = [
+ ["Curls, cords or wool?", "Water dog", "Poodle, Lagotto, Portuguese Water Dog"],
+ ["Long low ears, compact and low-slung?", "Spaniel", "Cocker, Springer, Clumber"],
+ ["Tall and lean under a long silky feathered coat?", "Setter", "English, Irish, Gordon"],
+ ["Tall and lean in a short tight coat?", "Pointer &amp; HPR", "GSP, Weimaraner, Vizsla"],
+ ["Solid and square, thick straight tail, broad kind head?", "Retriever", "Labrador, Golden, Chesapeake"],
+]
+
+
+def groups_screen():
+    """Markup + script for the group primer, injected into the cloned engine."""
+    cards = []
+    for g in GROUP_GUIDE:
+        rows = "".join(
+            f'<div class="gg-row"><span class="gg-k">{k}</span><span>{v}</span></div>'
+            for k, v in g["marks"])
+        cards.append(
+            f'<article class="gg-card" data-gg="{g["key"]}">'
+            f'<header class="gg-head"><h3>{g["name"]}</h3>'
+            f'<span class="gg-job">{g["job"]}</span></header>'
+            f'<p class="gg-one">{g["one"]}</p>'
+            f'<div class="gg-rows">{rows}</div>'
+            f'<p class="gg-vs"><b>Telling it apart</b> {g["vs"]}</p>'
+            f'<div class="gg-eg" data-eg="{g["key"]}"></div></article>')
+
+    steps = "".join(
+        f'<li><span class="gg-q">{q}</span>'
+        f'<span class="gg-a">{a}</span>'
+        f'<span class="gg-ex">{ex}</span></li>' for q, a, ex in DECISION)
+
+    html = (
+      '<section id="groups" class="screen" hidden>\n'
+      '  <div class="screen-head"><button class="back" data-nav="home" '
+      'aria-label="Back to home">←</button><span class="qcount">The five kinds</span></div>\n'
+      '  <p class="gg-intro">Every gundog does one of three jobs — find the bird, '
+      'flush it, or fetch it — and the job is written into the body. Learn the five '
+      'shapes first and most breeds place themselves.</p>\n'
+      f'  <ol class="gg-tree">{steps}</ol>\n'
+      f'  <div class="gg-grid">{"".join(cards)}</div>\n'
+      '</section>\n')
+
+    css = (
+      "\n/* ===== the five kinds ===== */\n"
+      ".gg-intro{max-width:64ch;color:var(--graphite);font-size:14.5px;line-height:1.6;margin:0 0 var(--s5)}\n"
+      ".gg-tree{list-style:none;counter-reset:gg;margin:0 0 var(--s6);padding:0;"
+      "border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface)}\n"
+      ".gg-tree li{counter-increment:gg;display:grid;grid-template-columns:auto 1fr auto;"
+      "gap:var(--s2) var(--s3);align-items:baseline;padding:10px var(--s4);border-top:1px solid var(--line-soft)}\n"
+      ".gg-tree li:first-child{border-top:0}\n"
+      ".gg-tree li::before{content:counter(gg);font:600 11px/1 var(--f-data);color:var(--graphite)}\n"
+      ".gg-q{font-size:14px}\n"
+      ".gg-a{font:600 12px/1 var(--f-mark);letter-spacing:.1em;text-transform:uppercase;color:var(--azure-ink)}\n"
+      ".gg-ex{grid-column:2/4;font-size:11.5px;color:var(--graphite)}\n"
+      ".gg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--s4)}\n"
+      ".gg-card{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:var(--s4)}\n"
+      ".gg-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s2);flex-wrap:wrap}\n"
+      ".gg-head h3{font-family:var(--f-title);font-size:15px;font-weight:600;letter-spacing:.1em;text-transform:uppercase}\n"
+      ".gg-job{font-size:11.5px;color:var(--graphite)}\n"
+      ".gg-one{margin:var(--s2) 0 var(--s3);font-size:14px;line-height:1.5}\n"
+      ".gg-rows{border-top:1px solid var(--line-soft)}\n"
+      ".gg-row{display:grid;grid-template-columns:74px 1fr;gap:var(--s3);padding:7px 0;"
+      "border-bottom:1px solid var(--line-soft);font-size:13px;line-height:1.45}\n"
+      ".gg-k{font:600 10.5px/1.5 var(--f-mark);letter-spacing:.09em;text-transform:uppercase;color:var(--graphite)}\n"
+      ".gg-vs{margin:var(--s3) 0 0;font-size:12.5px;line-height:1.5;color:var(--graphite)}\n"
+      ".gg-vs b{color:var(--ink);font-weight:600}\n"
+      ".gg-eg{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2);margin-top:var(--s3)}\n"
+      ".gg-eg figure{margin:0}\n"
+      ".gg-eg img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;"
+      "background:var(--field);border:1px solid var(--line);border-radius:var(--r)}\n"
+      ".gg-eg figcaption{font-size:10.5px;color:var(--graphite);margin-top:3px;line-height:1.3}\n")
+
+    js = (
+      "\n/* the five kinds: three example plates per group, taken from the data */\n"
+      "function renderGroups(){\n"
+      "  document.querySelectorAll('.gg-eg').forEach(box=>{\n"
+      "    const g=box.dataset.eg;\n"
+      "    const picks=BREEDS.filter(b=>b.group===g).slice(0,3);\n"
+      "    box.innerHTML=picks.map(b=>`<figure><img src=\"${b.img}\" alt=\"${esc(b.name)}\" "
+      "loading=\"lazy\"><figcaption>${esc(b.name)}</figcaption></figure>`).join('');\n"
+      "  });\n"
+      "}\n")
+
+    return html, css, js
+
+
+def inject_groups(src):
+    html, css, js = groups_screen()
+    src = src.replace('<section id="knowledge" class="screen" hidden>',
+                      html + '<section id="knowledge" class="screen" hidden>', 1)
+    src = src.replace("</style>", css + "</style>", 1)
+    src = src.replace('const SCREENS=["home"',
+                      'const SCREENS=["groups","home"', 1)
+    src = src.replace('if(id==="home")renderHome();',
+                      'if(id==="home")renderHome();if(id==="groups")renderGroups();', 1)
+    src = src.replace('else if(m==="browse"){renderBrowse();show("browse")}',
+                      'else if(m==="groups"){renderGroups();show("groups")}\n'
+                      '  else if(m==="browse"){renderBrowse();show("browse")}', 1)
+    src = src.replace('<button class="mode-card" data-mode="knowledge">',
+                      '<button class="mode-card" data-mode="groups">\n'
+                      '      <div class="ic gold"><svg viewBox="0 0 24 24">'
+                      '<path d="M3 6h7M3 12h7M3 18h7M14 6h7M14 12h7M14 18h7"/></svg></div>\n'
+                      '      <h3>The five kinds</h3><p>Pointer, setter, spaniel, retriever, '
+                      'water dog — what separates them, before the names.</p>\n'
+                      '    </button>\n'
+                      '    <button class="mode-card" data-mode="knowledge">', 1)
+    src = src.replace("/* ================= modes wiring ================= */", js +
+                      "/* ================= modes wiring ================= */", 1)
+    return src
 
 
 def main():
@@ -221,6 +387,8 @@ def main():
     src = re.sub(r"const KNOWLEDGE = \[.*?\n(?=const )",
                  "const KNOWLEDGE = " + json.dumps(KNOWLEDGE, ensure_ascii=False) + ";\n",
                  src, count=1, flags=re.S)
+
+    src = inject_groups(src)
 
     # ---- group taxonomy ----
     chips = "\n    ".join(
